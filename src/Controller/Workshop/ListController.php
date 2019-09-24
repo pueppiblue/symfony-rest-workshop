@@ -4,33 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller\Workshop;
 
-use App\Entity\Workshop;
+use App\Controller\ApiController;
 use App\Repository\WorkshopRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/workshops", name="list_workshops", methods={"GET"})
  */
-class ListController
+class ListController extends ApiController
 {
-    private $workshopRepository;
-
-    public function __construct(WorkshopRepository $workshopRepository)
+    public function __invoke(WorkshopRepository $workshopRepository)
     {
-        $this->workshopRepository = $workshopRepository;
-    }
+        $workshops = $workshopRepository->findAll();
 
-    public function __invoke()
-    {
-        $allWorkshops = $this->workshopRepository->findAll();
-
-        $allWorkshopsAsArray = array_map(function (Workshop $workshop): array {
-            return $workshop->toArray();
-        }, $allWorkshops);
-
-        return new Response(json_encode($allWorkshopsAsArray), Response::HTTP_OK, [
-            'Content-Type' => 'application/json',
-        ]);
+        return $this->createApiRepsonse($workshops);
     }
 }

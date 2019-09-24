@@ -111,13 +111,8 @@ class Attendee
         return $this;
     }
 
-    public function toArray()
+    public function __toString()
     {
-        return [
-            'id' => $this->id,
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email,
-        ];
+        return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
     }
 }
